@@ -65,7 +65,7 @@ func Run() {
 
 	//Todo : Define Service here
 	userSvc := userService.NewService(db.DB, userRepo, &redisRepo)
-	urlSvc := urlService.NewUrlService(urlRepo)
+	urlSvc := urlService.NewUrlService(urlRepo, redisRepo)
 
 	//Todo: Define controller
 	userCtrl := userController.NewController(userSvc, log)

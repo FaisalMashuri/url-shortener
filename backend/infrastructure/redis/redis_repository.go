@@ -3,14 +3,16 @@ package redis_client
 import (
 	"context"
 	"encoding/json"
-	"github.com/redis/go-redis/v9"
+	"fmt"
 	"time"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type Repository interface {
 	Save(ctx context.Context, key string, value interface{}, expiration time.Duration) error
 	SaveUnlimited(ctx context.Context, key string, value interface{}) error
-	Get(ctx context.Context, key string, result interface{}) (string, error)
+	Get(ctx context.Context, key string) (string, error)
 }
 
 type redisRepository struct {
@@ -34,8 +36,9 @@ func (rr *redisRepository) SaveUnlimited(ctx context.Context, key string, value 
 	return rr.Save(ctx, key, value, 0)
 }
 
-func (rr *redisRepository) Get(ctx context.Context, key string, result interface{}) (string, error) {
+func (rr *redisRepository) Get(ctx context.Context, key string) (string, error) {
 	value, err := rr.client.Get(ctx, key).Result()
+	fmt.Println("TEST GET REDIS : ", value)
 	if err != nil {
 		return "", err
 	}

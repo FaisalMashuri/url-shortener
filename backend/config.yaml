@@ -13,6 +13,8 @@ database:
   ssl: "disable"
   database: "short-url"
 
+
+
 log:
   host: "localhost"
   port: "9200"
