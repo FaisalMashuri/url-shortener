@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: postgresDB
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: boilerplate
+
+  redis:
+    image: redis:latest
+    container_name: redisDB
+    restart: always
+    ports:
+      - "6379:6379"
+
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: golangApp
+    restart: always
+    ports:
+      - "9999:9999"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DD_DB_HOST: db  # Nama host untuk koneksi ke PostgreSQL
+      REDIS_HOST: redis  # Nama host untuk koneksi ke redis
+
+  adminer:
+    image: adminer
+    container_name: dbAdminer
+    restart: always
+    ports:
+      - "8081:8080"

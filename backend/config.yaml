@@ -1,0 +1,30 @@
+appconfig:
+  name: "fiber-boilerplate"
+  host: "0.0.0.0"
+  port: "9999"
+  secret: "myVeryStrongSecretPassword64bitLength"
+
+database:
+  driver: "postgres"
+  host: "localhost"
+  port: "5432"
+  username: "postgres"
+  password: "root"
+  ssl: "disable"
+  database: "short-url"
+
+log:
+  host: "localhost"
+  port: "9200"
+  index: ""
+  user: "elastic"
+  pass: "P@ssw0rd"
+
+errorcontract:
+  json_path_file: "./script/errorContract.json"
+
+kafka:
+  host: "localhost"
+  group_id: ""
+  reset: ""
+

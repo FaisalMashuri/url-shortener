@@ -2,12 +2,27 @@
 import React, { useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import toast from 'react-hot-toast';
 
 export default function ShortenForm() {
     const [url, setUrl] = useState<string>("");
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("url : ", url)
+        try {
+            console.log(url)
+            const response = await fetch('http://127.0.0.1:9999/api/v1/short-url', {
+                method: "POST",
+                headers: {"Content-Type" : "application/json"},
+                body: JSON.stringify({
+                    url
+                })
+            })
+            await response.json()
+            setUrl("")
+            toast.success("Success create short url !!")
+        } catch (error) {
+            console.log("Error shortener url : ", error)
+        }
 
     }
   return (
