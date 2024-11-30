@@ -29,6 +29,8 @@ func (r *RouterStruct) SetupRoute(app *fiber.App) {
 	})
 
 	v1.Route("/short-url", func(router fiber.Router) {
-		router.Post("/", r.RouteParams.CreateShortUrl)
+		router.Post("/", r.RouteParams.UrlController.CreateShortUrl)
+		router.Get("/", r.RouteParams.UrlController.GetAllUrl)
+		router.Get("/:shortCode", r.RouteParams.UrlController.GetUrlByShortUrl)
 	})
 }
