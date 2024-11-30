@@ -8,9 +8,6 @@ import (
 	urlController "backend/internal/domain/url/controller"
 	urlRepository "backend/internal/domain/url/repository"
 	urlService "backend/internal/domain/url/service"
-	userController "backend/internal/domain/user/controller"
-	userRepository "backend/internal/domain/user/repository"
-	userService "backend/internal/domain/user/service"
 	middleware "backend/middleware/error"
 	middlewareLog "backend/middleware/log"
 	"backend/router"
@@ -60,19 +57,15 @@ func Run() {
 
 	//Todo : Define Repository here
 	redisRepo := redis_client.NewRedisRepository(redisClient)
-	userRepo := userRepository.NewRepository()
 	urlRepo := urlRepository.NewUrlRepository(db.DB)
 
 	//Todo : Define Service here
-	userSvc := userService.NewService(db.DB, userRepo, &redisRepo)
 	urlSvc := urlService.NewUrlService(urlRepo, redisRepo)
 
 	//Todo: Define controller
-	userCtrl := userController.NewController(userSvc, log)
 	urlCtrl := urlController.NewUrlController(urlSvc)
 
 	routerApp := router.NewRouter(&router.RouteParams{
-		userCtrl,
 		urlCtrl,
 	})
 	routerApp.SetupRoute(app)
