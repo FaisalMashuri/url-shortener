@@ -1,14 +1,14 @@
 package auth
 
 import (
-	"fmt"
-	"backend/internal/domain/user"
 	"backend/shared"
+	"fmt"
+	"log"
+
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/pkg/errors"
-	"log"
 )
 
 func NewJWThMiddleware(secret string) fiber.Handler {
@@ -32,11 +32,11 @@ func GetCredential(ctx *fiber.Ctx) (err error) {
 	fmt.Println("CREDENTIALS: ", claims)
 
 	//TODO: Mapping of claims JWT to user's model and save to context local
-	credentials := user.User{
-		ID:    claims["id"].(string),
-		Email: claims["email"].(string),
-	}
-	ctx.Locals("credentials", credentials)
+	// credentials := user.User{
+	// 	ID:    claims["id"].(string),
+	// 	Email: claims["email"].(string),
+	// }
+	// ctx.Locals("credentials", credentials)
 
 	return ctx.Next()
 }

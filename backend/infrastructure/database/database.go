@@ -3,7 +3,6 @@ package database
 import (
 	"backend/config"
 	"backend/internal/domain/url"
-	"backend/internal/domain/user"
 	"fmt"
 	"log"
 	"os"
@@ -48,7 +47,6 @@ func ConnectDatabase() *Database {
 		}
 
 		err = db.AutoMigrate(
-			user.User{},
 			url.Url{},
 		)
 		if err != nil {

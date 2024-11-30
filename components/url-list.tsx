@@ -2,32 +2,53 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { CopyIcon, EyeIcon } from "lucide-react";
+import { Check, CopyIcon, EyeIcon } from "lucide-react";
 
 type Url = {
   id: number;
   originalUrl: string;
   shortUrl: string;
-  view:number;
+  view: number;
 };
 
 export default function UrlList() {
   const [urls, seturls] = useState<Url[]>([]);
   const [loading, setLoading] = useState(true);
+  const [copiedUrls, setCopiedUrls] = useState<{ [key: string]: boolean }>({}); 
+
   console.log("urls : ", urls);
 
-  const shortUrl = (url:string) => `${process.env.NEXT_PUBLIC_BACKEND}/${url}`
+  const shortUrl = (url: string) => `${window.location.host}/${url}`;
 
   const getUrls = async () => {
     try {
       const response = await fetch("http://127.0.0.1:9999/api/v1/short-url");
-      const data  = await response.json();
+      const data = await response.json();
       seturls(data.data); // Update state
     } catch (error) {
       console.log("Error get url : ", error);
     } finally {
       setLoading(false); // Pastikan loading selesai setelah fetch
     }
+  };
+
+  const handleCopyUrl = (code: string) => {
+    // Set "copied" status untuk URL yang diklik
+    const fullUrl = `${window.location.host}/${code}`
+    navigator.clipboard.writeText(fullUrl).then(() => {
+        setCopiedUrls((prev) => ({
+            ...prev,
+            [code]: true,
+          }));
+    })
+   
+    // Timeout untuk reset status "copied" setelah beberapa detik
+    setTimeout(() => {
+      setCopiedUrls((prev) => ({
+        ...prev,
+        [code]: false,
+      }));
+    }, 2000); // Reset setelah 2 detik
   };
 
   useEffect(() => {
@@ -57,8 +78,14 @@ export default function UrlList() {
                   variant="ghost"
                   size="icon"
                   className="text-muted-foreground hover:bg-muted"
+                  onClick={() => handleCopyUrl(url.shortUrl)}
                 >
-                  <CopyIcon className="w-4 h-4" />
+                  {copiedUrls[url.shortUrl] ? (
+                    <Check className="w-4 h-4" />
+                  ) : (
+                    <CopyIcon className="w-4 h-4" />
+                  )}
+
                   <span className="sr-only">Copy URL</span>
                 </Button>
                 <span className="flex items-center gap-2">
