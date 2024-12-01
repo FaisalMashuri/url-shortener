@@ -66,10 +66,7 @@ func (service *urlService) GetUrlByShortUrl(ctx context.Context, shortUrl string
 
 		// Simpan data ke Redis dengan durasi 2 jam
 		expiration := time.Hour * 2
-		err = service.redisRepo.Save(ctx, dataUrl.ShortUrl, string(dataMarshal), expiration)
-		if err != nil {
-			return res, err
-		}
+		_ = service.redisRepo.Save(ctx, dataUrl.ShortUrl, string(dataMarshal), expiration)
 
 		res = dataUrl.ToResponse()
 		return res, nil
@@ -89,9 +86,7 @@ func (service *urlService) GetUrlByShortUrl(ctx context.Context, shortUrl string
 
 	// Atur durasi expired Redis
 	twoHourExpired := time.Hour * 2
-	if err := service.redisRepo.Save(ctx, data.ShortUrl, string(dataMarshal), twoHourExpired); err != nil {
-		return res, err
-	}
+	_ = service.redisRepo.Save(ctx, data.ShortUrl, string(dataMarshal), twoHourExpired)
 
 	// Tambah view
 	data.AddViewUrl()

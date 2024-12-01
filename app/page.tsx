@@ -1,3 +1,4 @@
+"use client"
 import { Toaster } from "react-hot-toast";
 import UrlShortenerContainer from "./../components/url-shortener-container";
 export default function Home() {

@@ -16,8 +16,6 @@ export default function UrlList() {
   const [loading, setLoading] = useState(true);
   const [copiedUrls, setCopiedUrls] = useState<{ [key: string]: boolean }>({}); 
 
-  console.log("urls : ", urls);
-
   const shortUrl = (url: string) => `${window.location.host}/${url}`;
 
   const getUrls = async () => {
@@ -34,7 +32,8 @@ export default function UrlList() {
 
   const handleCopyUrl = (code: string) => {
     // Set "copied" status untuk URL yang diklik
-    const fullUrl = `${window.location.host}/${code}`
+     
+    const fullUrl = typeof window !== 'undefined' ? `${window.location.host}/${code}` : "";
     navigator.clipboard.writeText(fullUrl).then(() => {
         setCopiedUrls((prev) => ({
             ...prev,
@@ -59,12 +58,28 @@ export default function UrlList() {
       <h2 className="text-2xl font-bold mb-2">Recent URLs</h2>
       <ul className="space-y-2">
         {loading ? (
-          <p>Loading...</p> // Loading state
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+            <ul className="space-y-2">
+              {[1,2,3].map((num) => (
+                <li key={num} className="flex items-center gap-2 rounded-md border bg-card p-4 text-card-foreground justify-between">
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  <div className="flex items-center gap-3">
+                    <div className="h-5 w-5 bg-gray-200 rounded"></div>
+                    <span className="flex items-center gap-2">
+                      <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 w-4 bg-gray-200 w-100 rounded"></div>
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div> // Loading state
         ) : urls.length > 0 ? (
           urls.map((url) => (
             <li
               key={url.id}
-              className="flex items-center gap-2 justify-between"
+              className="flex items-center gap-2 justify-between bg-card text-card-foreground border rounded-md p-3"
             >
               <Link
                 href={`/${url.shortUrl}`}
